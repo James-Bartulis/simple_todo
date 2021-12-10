@@ -14,6 +14,7 @@ export default {
       filterBy: undefined,
       editCache: '',
       editedTask: undefined,
+      click: undefined,
     }
   },
   computed: {
@@ -39,7 +40,6 @@ export default {
       this.editCache = todo.name;
       this.editedTask = todo;
       event.target.focus();
-      todo.done = false;
     },
     cancelEdit(todo, event){
       if(this.editedTask != todo) return;
@@ -61,9 +61,27 @@ export default {
     setFilter(value) {
       this.filterBy = value;
     },
-    toggleTask(todo, event) {
+    toggleTask(todo) {
       todo.done = !todo.done;
-      event.target.blur();
+    },
+    clickHandler(event) {
+      event.preventDefault();
+      return new Promise ((resolve) => {
+        if (this.click) {
+          clearTimeout(this.click)
+          resolve(2) // return 2 for double click
+        }
+        this.click = setTimeout(() => {
+         this.click = undefined
+         resolve(1) // return 1 for single click
+        }, 200)
+      });
+    },
+    clickAction(todo, event, clickType) {
+      if(clickType == 1) // single click
+        this.toggleTask(todo);
+      else // double click
+        this.editTask(todo, event);
     }
   }
 }
@@ -72,6 +90,7 @@ export default {
 <template>
   <div class="Container">
     <h1><u>TodoList</u></h1><br>
+
     <div class="newTask">
       <input
         v-model="name"
@@ -86,21 +105,27 @@ export default {
         <option class="Urgent">Urgent</option>
       </select>
     </div>
+
     <ul>
       <li v-for="todo in filteredList" :class="todo.type">
         <input
           v-model="todo.name"
-          @click="toggleTask(todo, $event)"
-          @dblclick="editTask(todo, $event)"
+          @mousedown="clickHandler($event).then(clickType => clickAction(todo, $event, clickType))"
           @blur="doneEdit(todo, $event)"
           @keyup.enter="doneEdit(todo, $event)"
           @keyup.esc="cancelEdit(todo, $event)"
-          :class="{done : todo.done}"
+          :class="{done : todo.done && editedTask != todo}"
           tabindex="-1"
           type="text">
         <button @click="deleteTask(todo)">x</button>
       </li>
+      <!-- when filteredList empty -->
+      <li v-if="filteredList.length == 0">
+        <p v-if="filterBy">There are no completed tasks.</p>
+        <p v-else>There are no tasks, relax! :D</p>
+      </li>
     </ul>
+
     <div class="footer">
       <div :class="{selected : filterBy == undefined}" @click="setFilter()">All</div>
       <div :class="{selected : filterBy == false}" @click="setFilter(false)">Todo</div>
@@ -131,7 +156,7 @@ $todoBackground: #f4e5d2
   padding: 10px
   border-radius: 5px
   & > *
-    width: 300px
+    width: 350px
     font-size: 1.5em
     font-family: Verdana, Geneva, Tahoma, sans-serif
     margin: 0
