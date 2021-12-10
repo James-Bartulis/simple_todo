@@ -26,16 +26,17 @@ export default {
 <template>
   <div class="Container">
     <h1><u>TodoList</u></h1><br>
-    <div class="newTodo">
+    <div class="newTask">
       <input
         v-model="name"
+        placeholder="New Task"
         type="text">
       <button>Add Task</button>
-      <select v-model="type">
-        <option>Home</option>
-        <option>Work</option>
-        <option>Hobby</option>
-        <option>Urgent</option>
+      <select v-model="type" :class="type">
+        <option class="Home">Home</option>
+        <option class="Work">Work</option>
+        <option class="Hobby">Hobby</option>
+        <option class="Urgent">Urgent</option>
       </select>
     </div>
     <ul>
@@ -76,13 +77,23 @@ $todoBackground: #f4e5d2
     font-family: Verdana, Geneva, Tahoma, sans-serif
     margin: 0
     padding: 0
-  & > .newTodo
+  & > .newTask
     display: flex
     justify-content: space-between
-    & > input
-      cursor: text
+    & > *
+      outline: none
+      border: none
+      padding: 5px
     & > input, & > button
       flex-grow: 1
+      border-bottom: 2px solid $textDark
+      background-color: inherit
+    & > input
+      cursor: text
+    & > select
+      color: $textLight
+      border-top-right-radius: 5px
+      border-bottom-right-radius: 5px
   & > ul
     list-style: none
     & > li
@@ -90,5 +101,12 @@ $todoBackground: #f4e5d2
       margin-top: 5px
       & > input
         flex-grow: 1
-
+.Home
+  background-color: $blue
+.Work
+  background-color: $yellow
+.Hobby
+  background-color: $green
+.Urgent
+  background-color: $red
 </style>
