@@ -4,12 +4,7 @@ export default {
   data() {
     return {
       name: '',
-      list: [
-        {name: 'Home', type: 'Home', done: false},
-        {name: 'Work', type: 'Work', done: true},
-        {name: 'Hobby', type: 'Hobby', done: false},
-        {name: 'Urgent', type: 'Urgent', done: true},
-      ],
+      list: [],
       type: 'Home',
       filterBy: undefined,
       editCache: '',
@@ -82,6 +77,22 @@ export default {
         this.toggleTask(todo);
       else // double click
         this.editTask(todo, event);
+    }
+  },
+  mounted() {
+    this.list = JSON.parse(localStorage.getItem("list")) || [
+        {name: 'Home', type: 'Home', done: false},
+        {name: 'Work', type: 'Work', done: true},
+        {name: 'Hobby', type: 'Hobby', done: false},
+        {name: 'Urgent', type: 'Urgent', done: true},
+      ];
+  },
+  watch: {
+    list: {
+      handler(newValue, oldValue) {
+        localStorage.setItem("list", JSON.stringify(newValue));
+      },
+      deep: true
     }
   }
 }
