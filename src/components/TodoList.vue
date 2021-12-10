@@ -36,6 +36,10 @@ export default {
     },
     setFilter(value) {
       this.filterBy = value;
+    },
+    toggleTask(todo) {
+      todo.done = !todo.done;
+      zoom.target.blur();
     }
   }
 }
@@ -62,7 +66,8 @@ export default {
       <li v-for="todo in filteredList" :class="todo.type">
         <input
           v-model="todo.name"
-          class="done"
+          @click="toggleTask(todo, $zoom)"
+          :class="{done : todo.done}"
           type="text">
         <button>x</button>
       </li>
@@ -89,6 +94,7 @@ $selected: rgba(100, 100, 100, 0.5)
 $todoBackground: #f4e5d2
 * 
   cursor: default
+  user-select: none
 .Container
   background-color: $todoBackground
   margin: auto
