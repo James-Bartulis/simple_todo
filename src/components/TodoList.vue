@@ -11,8 +11,9 @@ export default {
         {name: 'Urgent', type: 'Urgent', done: true},
       ],
       type: 'Home',
-      filterBy: undefined
-
+      filterBy: undefined,
+      editCache: '',
+      editedTask: undefined,
     }
   },
   computed: {
@@ -34,15 +35,35 @@ export default {
 
       this.name = '';
     },
+    editTask(todo, event){
+      this.editCache = todo.name;
+      this.editedTask = todo;
+      event.target.focus();
+      todo.done = false;
+    },
+    cancelEdit(todo, event){
+      if(this.editedTask != todo) return;
+      todo.name = this.editCache;
+      this.editedTask = undefined;
+      event.target.blur();
+    },
+    doneEdit(todo, event){
+      if(this.editedTask != todo) return;
+      this.editedTask = undefined;
+      todo.name = todo.name.trim();
+      if(todo.name == '')
+        this.deleteTask(todo);
+      event.target.blur();
+    },
     deleteTask(todo) {
       this.list.splice(this.list.indexOf(todo), 1);
     },
     setFilter(value) {
       this.filterBy = value;
     },
-    toggleTask(todo) {
+    toggleTask(todo, event) {
       todo.done = !todo.done;
-      zoom.target.blur();
+      event.target.blur();
     }
   }
 }
@@ -69,8 +90,13 @@ export default {
       <li v-for="todo in filteredList" :class="todo.type">
         <input
           v-model="todo.name"
-          @click="toggleTask(todo, $zoom)"
+          @click="toggleTask(todo, $event)"
+          @dblclick="editTask(todo, $event)"
+          @blur="doneEdit(todo, $event)"
+          @keyup.enter="doneEdit(todo, $event)"
+          @keyup.esc="cancelEdit(todo, $event)"
           :class="{done : todo.done}"
+          tabindex="-1"
           type="text">
         <button @click="deleteTask(todo)">x</button>
       </li>
