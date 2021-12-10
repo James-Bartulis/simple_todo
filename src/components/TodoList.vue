@@ -48,7 +48,11 @@ export default {
         <button>x</button>
       </li>
     </ul>
-    <div class="footer"></div>
+    <div class="footer">
+      <div class="selected">All</div>
+      <div>Todo</div>
+      <div>Completed</div>
+    </div>
   </div>
 </template>
 
@@ -114,6 +118,16 @@ $todoBackground: #f4e5d2
       & > button
         color: $removeButton
         font-weight: bold
+  & > .footer
+    display: flex
+    justify-content: space-between
+    margin-top: 5px
+    & > div
+      font-size: 0.7em
+      border: 1px solid $textDark
+      border-radius: 5px
+      padding: 5px
+
 .done
   text-decoration: line-through 3px solid $textLight
 .Home
@@ -124,4 +138,6 @@ $todoBackground: #f4e5d2
   background-color: $green
 .Urgent
   background-color: $red
+.selected
+  background-color: $selected
 </style>
