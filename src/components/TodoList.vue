@@ -31,8 +31,11 @@ export default {
         type: this.type,
         done: false
       });
-      
+
       this.name = '';
+    },
+    deleteTask(todo) {
+      this.list.splice(this.list.indexOf(todo), 1);
     },
     setFilter(value) {
       this.filterBy = value;
@@ -69,7 +72,7 @@ export default {
           @click="toggleTask(todo, $zoom)"
           :class="{done : todo.done}"
           type="text">
-        <button>x</button>
+        <button @click="deleteTask(todo)">x</button>
       </li>
     </ul>
     <div class="footer">
