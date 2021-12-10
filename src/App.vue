@@ -9,4 +9,7 @@ import TodoList from './components/TodoList.vue'
 </template>
 
 <style>
+body {
+  background-color: #DDD;
+}
 </style>
