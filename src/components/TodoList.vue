@@ -22,6 +22,18 @@ export default {
     }
   },
   methods: {
+    addTask() {
+      this.name = this.name.trim();
+      if(this.name == '') return;
+
+      this.list.push({
+        name: this.name,
+        type: this.type,
+        done: false
+      });
+      
+      this.name = '';
+    },
     setFilter(value) {
       this.filterBy = value;
     }
@@ -35,9 +47,10 @@ export default {
     <div class="newTask">
       <input
         v-model="name"
+        @keyup.enter="addTask()"
         placeholder="New Task"
         type="text">
-      <button>Add Task</button>
+      <button @click="addTask()">Add Task</button>
       <select v-model="type" :class="type">
         <option class="Home">Home</option>
         <option class="Work">Work</option>
