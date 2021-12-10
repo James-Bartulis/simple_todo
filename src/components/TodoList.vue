@@ -10,15 +10,21 @@ export default {
         {name: 'Hobby', type: 'Hobby', done: false},
         {name: 'Urgent', type: 'Urgent', done: true},
       ],
-      type: 'Home'
+      type: 'Home',
+      filterBy: undefined
 
     }
   },
   computed: {
-    
+    filteredList() {
+      if(this.filterBy == undefined) return this.list;
+      return this.list.filter(task => task.done == this.filterBy);
+    }
   },
   methods: {
-
+    setFilter(value) {
+      this.filterBy = value;
+    }
   }
 }
 </script>
@@ -40,7 +46,7 @@ export default {
       </select>
     </div>
     <ul>
-      <li v-for="todo in list" :class="todo.type">
+      <li v-for="todo in filteredList" :class="todo.type">
         <input
           v-model="todo.name"
           class="done"
@@ -49,9 +55,9 @@ export default {
       </li>
     </ul>
     <div class="footer">
-      <div class="selected">All</div>
-      <div>Todo</div>
-      <div>Completed</div>
+      <div :class="{selected : filterBy == undefined}" @click="setFilter()">All</div>
+      <div :class="{selected : filterBy == false}" @click="setFilter(false)">Todo</div>
+      <div :class="{selected : filterBy == true}" @click="setFilter(true)">Completed</div>
     </div>
   </div>
 </template>
