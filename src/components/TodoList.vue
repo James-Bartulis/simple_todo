@@ -40,11 +40,12 @@ export default {
       </select>
     </div>
     <ul>
-      <li v-for="todo in list">
+      <li v-for="todo in list" :class="todo.type">
         <input
           v-model="todo.name"
+          class="done"
           type="text">
-        <div class="removeTask">x</div>
+        <button>x</button>
       </li>
     </ul>
     <div class="footer"></div>
@@ -99,8 +100,22 @@ $todoBackground: #f4e5d2
     & > li
       display: flex
       margin-top: 5px
+      padding: 5px 10px
+      border-radius: 5px
+      & > *
+        padding: 5px
+        border: none
+        outline: none
+        font-size: 0.9em
+        background-color: inherit
       & > input
         flex-grow: 1
+        color: $textLight
+      & > button
+        color: $removeButton
+        font-weight: bold
+.done
+  text-decoration: line-through 3px solid $textLight
 .Home
   background-color: $blue
 .Work
