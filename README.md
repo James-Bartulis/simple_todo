@@ -1,7 +1,33 @@
-# Vue 3 + Vite
-
-This template should help get you started developing with Vue 3 in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
-
-## Recommended IDE Setup
-
-- [VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=johnsoncodehk.volar)
+# Simple Todo
+- Toggle Task Complete
+    -
+    - Single click task in list
+- Add Task
+    -
+    - Select type from dropdown
+        - Home - blue
+        - Work - yellow
+        - Hobby - green
+        - Urgent - red
+    - Type new task in input field
+        - Enter key
+        - Click button 'Add Task'
+- Edit Task
+    -
+    - Double click task in list
+        - Accept changes
+            - Enter
+            - When focus is lost
+        - Revert changes
+            - Escape
+- Delete Task
+    -
+    - Click 'x', right of task name
+    - Edit and remove all characters
+- Sort
+    -
+    - Select from below options
+        - All
+        - Todo
+        - Complete
+        
