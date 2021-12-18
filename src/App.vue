@@ -10,6 +10,6 @@ import TodoList from './components/TodoList.vue'
 
 <style>
 body {
-  background-color: #DDD;
+  background-color: var(--bodybackground)
 }
 </style>

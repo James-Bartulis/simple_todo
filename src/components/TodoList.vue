@@ -10,6 +10,7 @@ export default {
       editCache: '',
       editedTask: undefined,
       click: undefined,
+      darkMode: false,
     }
   },
   computed: {
@@ -77,9 +78,17 @@ export default {
         this.toggleTask(todo);
       else // double click
         this.editTask(todo, event);
+    },
+    toggleDarkMode() {
+      this.darkMode = !this.darkMode;
+      document.body.classList.toggle('dark');
+      localStorage.setItem("darkMode", this.darkMode);
     }
   },
   mounted() {
+    this.darkMode = localStorage.getItem("darkMode");
+    if(this.darkMode)
+      document.body.classList.toggle('dark');
     this.list = JSON.parse(localStorage.getItem("list")) || [
         {name: 'Home', type: 'Home', done: false},
         {name: 'Work', type: 'Work', done: true},
@@ -100,7 +109,13 @@ export default {
 
 <template>
   <div class="Container">
-    <h1><u>TodoList</u></h1><br>
+    <div class="header">
+      <h1><u>TodoList</u></h1>
+      <label class="switch">
+        <input @click="toggleDarkMode()" class="checkbox" type="checkbox">
+        <span class="slider"></span>
+      </label>
+    </div><br>
 
     <div class="newTask">
       <input
@@ -145,7 +160,7 @@ export default {
   </div>
 </template>
 
-<style lang="sass" scoped>
+<style lang="sass">
 $blue: #021f4b
 $yellow: #cb8a2c
 $green: #01342d
@@ -157,17 +172,87 @@ $removeButton: rgba(200, 200, 200, 0.5)
 $selected: rgba(100, 100, 100, 0.5)
 
 $todoBackground: #f4e5d2
+$bodyBackground: #DDD
+
+:root
+  --blue: #{$blue}
+  --yellow: #{$yellow}
+  --green: #{$green}
+  --red: #{$red}
+
+  --textdark: #{$textDark}
+  --textlight: #{$textLight}
+  --textinput: #{$textLight}
+  --removebutton: #{$removeButton}
+  --selected: #{$selected}
+
+  --todobackground: #{$todoBackground}
+  --bodybackground: #{$bodyBackground}
+
+$darktodobackground: #333
+$darkbodybackground: #111
+
+.dark
+  --blue: #{$blue}
+  --yellow: #{$yellow}
+  --green: #{$green}
+  --red: #{$red}
+
+  --textdark: #{$textLight}
+  --textlight: #{$textDark}
+  --removebutton: #{$removeButton}
+  --selected: #{$selected}
+
+  --todobackground: #{$darktodobackground}
+  --bodybackground: #{$darkbodybackground}
+
 * 
   cursor: default
   user-select: none
+  transition: .4s linear background-color, color
 .Container
-  background-color: $todoBackground
+  background-color: var(--todobackground)
   margin: auto
   width: fit-content
   padding: 10px
   border-radius: 5px
+  resize: horizontal
+  overflow: auto
+  min-width: 350px
+  & > .header
+    display: flex
+    align-items: center
+    justify-content: space-between
+    height: 28px
+    color: var(--textdark)
+    font-size: 0.75em
+    & > .switch
+      position: relative
+      width: 45px
+      height: 24px
+      & > .slider
+        position: absolute
+        cursor: pointer
+        top: 0
+        left: 0
+        right: 0
+        bottom: 0
+        background-color: var(--bodybackground)
+        border-radius: 5px
+        transition: .4s
+        &:before
+          border-radius: 5px
+          background-color: var(--selected)
+          position: absolute
+          content: ""
+          height: 18px
+          width: 18px
+          left: 3px
+          bottom: 3px
+          transition: .4s
+      & > .checkbox:checked + .slider:before
+        transform: translateX(18px)
   & > *
-    width: 350px
     font-size: 1.5em
     font-family: Verdana, Geneva, Tahoma, sans-serif
     margin: 0
@@ -181,12 +266,13 @@ $todoBackground: #f4e5d2
       padding: 5px
     & > input, & > button
       flex-grow: 1
-      border-bottom: 2px solid $textDark
+      border-bottom: 2px solid var(--textdark)
       background-color: inherit
+      color: var(--textdark)
     & > input
       cursor: text
     & > select
-      color: $textLight
+      color: var(--textinput)
       border-top-right-radius: 5px
       border-bottom-right-radius: 5px
   & > ul
@@ -196,7 +282,9 @@ $todoBackground: #f4e5d2
       margin-top: 5px
       padding: 5px 10px
       border-radius: 5px
+      transition: none
       & > *
+        transition: none
         padding: 5px
         border: none
         outline: none
@@ -204,30 +292,35 @@ $todoBackground: #f4e5d2
         background-color: inherit
       & > input
         flex-grow: 1
-        color: $textLight
+        color: var(--textinput)
       & > button
-        color: $removeButton
+        color: var(--removebutton)
         font-weight: bold
+      & > p
+        color: var(--textdark)
   & > .footer
     display: flex
     justify-content: space-between
     margin-top: 5px
     & > div
       font-size: 0.7em
-      border: 1px solid $textDark
+      color: var(--textdark)
       border-radius: 5px
       padding: 5px
+      transition: none
+      &:hover
+        background-color: var(--selected)
 
 .done
-  text-decoration: line-through 3px solid $textLight
+  text-decoration: line-through 3px solid var(--textinput)
 .Home
-  background-color: $blue
+  background-color: var(--blue)
 .Work
-  background-color: $yellow
+  background-color: var(--yellow)
 .Hobby
-  background-color: $green
+  background-color: var(--green)
 .Urgent
-  background-color: $red
+  background-color: var(--red)
 .selected
-  background-color: $selected
+  background-color: var(--selected)
 </style>
