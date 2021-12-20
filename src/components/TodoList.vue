@@ -82,11 +82,11 @@ export default {
     toggleDarkMode() {
       this.darkMode = !this.darkMode;
       document.body.classList.toggle('dark');
-      localStorage.setItem("darkMode", this.darkMode);
+      localStorage.setItem("darkMode", JSON.stringify(this.darkMode));
     }
   },
   mounted() {
-    this.darkMode = localStorage.getItem("darkMode");
+    this.darkMode = JSON.parse(localStorage.getItem("darkMode"));
     if(this.darkMode)
       document.body.classList.toggle('dark');
     this.list = JSON.parse(localStorage.getItem("list")) || [
