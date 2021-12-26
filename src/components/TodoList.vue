@@ -22,6 +22,14 @@ export default {
       if(this.filterBy != undefined) l = this.filterByDone(l);
       return l;
     },
+    totalLength() {
+      return this.list.length;
+    },
+    todoLength() {
+      return this.list.reduce((prev, cur) => {
+        return !cur.done + prev;
+      }, 0);
+    }
   },
   methods: {
     addTask() {
@@ -169,9 +177,9 @@ export default {
     </ul>
 
     <div class="footer">
-      <div :class="{selected : filterBy == undefined}" @click="setFilter()">All</div>
-      <div :class="{selected : filterBy == false}" @click="setFilter(false)">Todo</div>
-      <div :class="{selected : filterBy == true}" @click="setFilter(true)">Completed</div>
+      <div :class="{selected : filterBy == undefined}" @click="setFilter()">All: {{ totalLength }}</div>
+      <div :class="{selected : filterBy == false}" @click="setFilter(false)">Todo: {{ todoLength }}</div>
+      <div :class="{selected : filterBy == true}" @click="setFilter(true)">Completed: {{ totalLength - todoLength }}</div>
     </div>
   </div>
 </template>
