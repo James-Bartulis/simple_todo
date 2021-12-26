@@ -159,7 +159,7 @@ export default {
           :class="{done : todo.done && editedTask != todo}"
           tabindex="-1"
           type="text">
-        <button @click="deleteTask(todo)">x</button>
+        <button v-if="todo.done" @click="deleteTask(todo)">x</button>
       </li>
       <!-- when filteredList empty -->
       <li v-if="filteredList.length == 0">
