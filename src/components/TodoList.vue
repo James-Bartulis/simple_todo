@@ -7,6 +7,7 @@ export default {
       list: [],
       type: 'Home',
       filterBy: undefined,
+      filterType: false,
       editCache: '',
       editedTask: undefined,
       click: undefined,
@@ -15,9 +16,12 @@ export default {
   },
   computed: {
     filteredList() {
-      if(this.filterBy == undefined) return this.list;
-      return this.list.filter(task => task.done == this.filterBy);
-    }
+      if(this.filterBy == undefined && this.filterType == false) return this.list;
+      let l = this.list;
+      if(this.filterType) l = this.filterByType(l);
+      if(this.filterBy != undefined) l = this.filterByDone(l);
+      return l;
+    },
   },
   methods: {
     addTask() {
@@ -56,6 +60,15 @@ export default {
     },
     setFilter(value) {
       this.filterBy = value;
+    },
+    toggleFilterType() {
+      this.filterType = !this.filterType;
+    },
+    filterByType(l) {
+        return l.filter(task => task.type == this.type);
+    },
+    filterByDone(l) {
+        return l.filter(task => task.done == this.filterBy);
     },
     toggleTask(todo) {
       todo.done = !todo.done;
@@ -124,6 +137,9 @@ export default {
         placeholder="New Task"
         type="text">
       <button @click="addTask()">Add Task</button>
+      <button @click="toggleFilterType()">
+        Filter
+      </button>
       <select v-model="type" :class="type">
         <option class="Home">Home</option>
         <option class="Work">Work</option>

@@ -24,8 +24,10 @@
     -
     - Click 'x', right of task name
     - Edit and remove all characters
-- Sort
+- Filter
     -
+    - Click 'Filter'
+        - Filters by currently selected type
     - Select from below options
         - All
         - Todo
